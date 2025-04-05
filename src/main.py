@@ -3,6 +3,8 @@ import envactions
 import time
 import transcripts
 import math
+import asyncio
+import os
 
 from discord import app_commands
 
@@ -19,10 +21,12 @@ CATEGORY_ID = ServerJSON.TicketsCategoryID
 
 TICKET_CHANNEL_IDS = []
 
+os.makedirs("./transcripts", exist_ok=True)
+
 class RemovalPanel(discord.ui.View):
     @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌")
     async def button_callback(self, interaction: discord.Interaction, button: discord.Button):
-        await interaction.response.send_message("Generating transcript...")
+        await interaction.response.defer(ephemeral=True)
 
         transcript_html = transcripts.generate_transcript(interaction.channel.id, "#" + interaction.channel.name)
 
@@ -35,7 +39,7 @@ class RemovalPanel(discord.ui.View):
         await interaction.followup.send("Transcript available " + f"[here](https://tickets.natixone.xyz/transcript/{userid}/{unix_timestamp})")
         await interaction.followup.send("Transcript generated and saved! Closing in 5 seconds...")
 
-        time.sleep(5)
+        await asyncio.sleep(5)
         await interaction.channel.delete()
         
         if interaction.channel.id in TICKET_CHANNEL_IDS:
