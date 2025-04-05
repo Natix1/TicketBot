@@ -12,6 +12,6 @@ echo "Initializing virtual environment..."
 python3 -m venv .venv
 
 echo "Installing python dependencies..."
-./venv/bin/pip3 install -r requirements.txt
+./.venv/bin/pip3 install -r requirements.txt
 
 echo "Done!"
