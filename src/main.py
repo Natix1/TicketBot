@@ -25,9 +25,14 @@ class RemovalPanel(discord.ui.View):
         await interaction.response.send_message("Generating transcript...")
 
         transcript_html = transcripts.generate_transcript(interaction.channel.id, "#" + interaction.channel.name)
-        with open(f"./transcripts/user-{interaction.user.id}-{math.floor(time.time())}.html", "w") as f:
+
+        userid = interaction.user.id
+        unix_timestamp = math.floor(time.time())
+
+        with open(f"./transcripts/user-{userid}-{unix_timestamp}.html", "w") as f:
             f.write(transcript_html)
 
+        await interaction.followup.send("Transcript available " + f"[here](https://tickets.natixone.xyz/transcript/{userid}/{unix_timestamp})")
         await interaction.followup.send("Transcript generated and saved! Closing in 5 seconds...")
 
         time.sleep(5)
