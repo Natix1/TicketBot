@@ -9,9 +9,9 @@ go build -o fileserver ./gosrc
 mv fileserver ./dist
 
 echo "Initializing virtual environment..."
-python -m venv .venv
+python3 -m venv .venv
 
 echo "Installing python dependencies..."
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 
 echo "Done!"
