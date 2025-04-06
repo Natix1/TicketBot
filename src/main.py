@@ -19,6 +19,7 @@ ServerJSON = envactions.GetServerConfiguration()
 GUILD_ID = ServerJSON.GuildID
 PANEL_CHANNEL_ID = ServerJSON.ChannelID
 CATEGORY_ID = ServerJSON.TicketsCategoryID
+TRANSCRIPTS_CHANNEl_ID = ServerJSON.TranscriptsChannelID
 
 TICKET_CHANNEL_IDS = utils.get_ticket_ids_from_disk()
 
@@ -44,9 +45,23 @@ class RemovalPanel(discord.ui.View):
         with open("transcripts/" + fileName, "w") as f:
             f.write(transcript_html)
 
-        await interaction.followup.send("Transcript available " + f"[here](https://tickets.natixone.xyz/transcript/{userid}/{unix_timestamp})" + ". Closing in 5 seconds.")
+        embed = discord.Embed(
+            title="Ticket transcript: " + interaction.channel.name,
+            description=f"You can find the transcript [here.](https://tickets.natixone.xyz/{userid}/{unix_timestamp})",
+            color=0x00ff00
+        )
 
-        await asyncio.sleep(5)
+        transcripts_channel = client.get_channel(TRANSCRIPTS_CHANNEl_ID)
+
+        try:
+            await interaction.user.send(content="", embed=embed)
+        except discord.Forbidden:
+            pass
+
+        await interaction.channel.send(content="", embed=embed)
+        await transcripts_channel.send(content="", embed=embed)
+
+        await asyncio.sleep(4)
         await interaction.channel.delete()
         
         if interaction.channel.id in TICKET_CHANNEL_IDS:
