@@ -3,3 +3,4 @@ __pycache__/
 .venv
 dist/
 transcripts/*
+data/ticket_ids.json
