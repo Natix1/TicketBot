@@ -39,5 +39,5 @@ func transcriptsHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/transcript/", transcriptsHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8069", nil))
 }
