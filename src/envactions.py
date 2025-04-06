@@ -11,6 +11,7 @@ class ServerJSONConfig:
     GuildID: int
     ChannelID: int
     TicketsCategoryID: int
+    TranscriptsChannelID: int
 
 def GetBotToken() -> str:
     TOKEN = environ.get("TOKEN")
@@ -32,7 +33,8 @@ def GetServerConfiguration() -> ServerJSONConfig:
     config = ServerJSONConfig(
         GuildID=contents["GuildID"],
         ChannelID=contents["ChannelID"],
-        TicketsCategoryID=contents["TicketsCategoryID"]
+        TicketsCategoryID=contents["TicketsCategoryID"],
+        TranscriptsChannelID=contents["TranscriptsChannelID"]
     )
 
     return config
