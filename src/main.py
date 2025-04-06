@@ -4,7 +4,6 @@ import time
 import transcripts
 import math
 import asyncio
-import os
 
 from discord import app_commands
 
@@ -20,8 +19,6 @@ PANEL_CHANNEL_ID = ServerJSON.ChannelID
 CATEGORY_ID = ServerJSON.TicketsCategoryID
 
 TICKET_CHANNEL_IDS = []
-
-os.makedirs("./transcripts", exist_ok=True)
 
 class RemovalPanel(discord.ui.View):
     @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌")
