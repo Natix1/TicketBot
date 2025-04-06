@@ -24,10 +24,13 @@ TICKET_CHANNEL_IDS = utils.get_ticket_ids_from_disk()
 
 def cleanup():
     print("Closing...")
-    utils.dump_ticket_ids_to_disk()
+    utils.dump_ticket_ids_to_disk(TICKET_CHANNEL_IDS)
     print("Done!")
 
 class RemovalPanel(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
     @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌", custom_id="ticket_close_button")
     async def button_callback(self, interaction: discord.Interaction, button: discord.Button):
         await interaction.response.defer(ephemeral=True)
@@ -48,7 +51,7 @@ class RemovalPanel(discord.ui.View):
         
         if interaction.channel.id in TICKET_CHANNEL_IDS:
             TICKET_CHANNEL_IDS.remove(interaction.channel.id)
-            utils.dump_ticket_ids_to_disk()
+            utils.dump_ticket_ids_to_disk(TICKET_CHANNEL_IDS)
         
 class TicketPanel(discord.ui.View):
     def __init__(self):
@@ -69,13 +72,15 @@ class TicketPanel(discord.ui.View):
             category=category
         )
 
+        await new_channel.set_permissions(interaction.user, read_messages=True, send_messages=True)
+
         embed = discord.Embed(
             title = "Support ticket",
             description=f"Opened by @{interaction.user.name}"
         )
 
         TICKET_CHANNEL_IDS.append(new_channel.id)
-        utils.dump_ticket_ids_to_disk()
+        utils.dump_ticket_ids_to_disk(TICKET_CHANNEL_IDS)
 
         await new_channel.send(content=f"<@{interaction.user.id}>", embed=embed, view=RemovalPanel())
         await interaction.followup.send(f"Created ticket! <#{new_channel.id}>", ephemeral=True)
