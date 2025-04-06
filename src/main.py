@@ -4,6 +4,7 @@ import time
 import transcripts
 import math
 import asyncio
+import utils
 
 from discord import app_commands
 
@@ -18,7 +19,7 @@ GUILD_ID = ServerJSON.GuildID
 PANEL_CHANNEL_ID = ServerJSON.ChannelID
 CATEGORY_ID = ServerJSON.TicketsCategoryID
 
-TICKET_CHANNEL_IDS = []
+TICKET_CHANNEL_IDS = utils.get_ticket_ids_from_disk()
 
 class RemovalPanel(discord.ui.View):
     @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌", custom_id="ticket_close_button")
@@ -41,6 +42,7 @@ class RemovalPanel(discord.ui.View):
         
         if interaction.channel.id in TICKET_CHANNEL_IDS:
             TICKET_CHANNEL_IDS.remove(interaction.channel.id)
+            utils.dump_ticket_ids_to_disk()
         
 class TicketPanel(discord.ui.View):
     def __init__(self):
@@ -67,6 +69,7 @@ class TicketPanel(discord.ui.View):
         )
 
         TICKET_CHANNEL_IDS.append(new_channel.id)
+        utils.dump_ticket_ids_to_disk()
 
         await new_channel.send(content=f"<@{interaction.user.id}>", embed=embed, view=RemovalPanel())
         await interaction.followup.send(f"Created ticket! <#{new_channel.id}>", ephemeral=True)
