@@ -5,6 +5,7 @@ import transcripts
 import math
 import asyncio
 import utils
+import atexit
 
 from discord import app_commands
 
@@ -20,6 +21,11 @@ PANEL_CHANNEL_ID = ServerJSON.ChannelID
 CATEGORY_ID = ServerJSON.TicketsCategoryID
 
 TICKET_CHANNEL_IDS = utils.get_ticket_ids_from_disk()
+
+def cleanup():
+    print("Closing...")
+    utils.dump_ticket_ids_to_disk()
+    print("Done!")
 
 class RemovalPanel(discord.ui.View):
     @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌", custom_id="ticket_close_button")
@@ -109,4 +115,5 @@ async def on_message(message: discord.Message):
     
     transcripts.add_message(message=message)
 
+atexit.register(cleanup)
 client.run(TOKEN)
