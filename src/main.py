@@ -19,7 +19,6 @@ GUILD_ID = ServerJSON.GuildID
 PANEL_CHANNEL_ID = ServerJSON.ChannelID
 CATEGORY_ID = ServerJSON.TicketsCategoryID
 
-TRANSCRIPTS_DIR = "/home/natix/Code/Python/XeneraBot/src/transcripts"
 TICKET_CHANNEL_IDS = []
 
 os.makedirs("./transcripts", exist_ok=True)
@@ -34,12 +33,11 @@ class RemovalPanel(discord.ui.View):
         userid = interaction.user.id
         unix_timestamp = math.floor(time.time())
 
-        file_path = os.path.join(TRANSCRIPTS_DIR, f"user-{userid}-{unix_timestamp}.html")
-        with open(file_path, "w") as f:
+        fileName = f"user-{userid}-{unix_timestamp}.html"
+        with open("transcripts/" + fileName, "w") as f:
             f.write(transcript_html)
 
-        await interaction.followup.send("Transcript available " + f"[here](https://tickets.natixone.xyz/transcript/{userid}/{unix_timestamp})")
-        await interaction.followup.send("Transcript generated and saved! Closing in 5 seconds...")
+        await interaction.followup.send("Transcript available " + f"[here](https://tickets.natixone.xyz/transcript/{userid}/{unix_timestamp})" + ". Closing in 5 seconds.")
 
         await asyncio.sleep(5)
         await interaction.channel.delete()
