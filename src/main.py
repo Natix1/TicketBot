@@ -47,7 +47,7 @@ class RemovalPanel(discord.ui.View):
 
         embed = discord.Embed(
             title="Ticket transcript: " + interaction.channel.name,
-            description=f"You can find the transcript [here.](https://tickets.natixone.xyz/{userid}/{unix_timestamp})",
+            description=f"You can find the transcript [here.](https://tickets.natixone.xyz/transcripts/{userid}/{unix_timestamp})",
             color=0x00ff00
         )
 

@@ -37,7 +37,7 @@ func transcriptsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/transcript/", transcriptsHandler)
+	http.HandleFunc("/transcripts/", transcriptsHandler)
 
 	log.Fatal(http.ListenAndServe(":8069", nil))
 }
