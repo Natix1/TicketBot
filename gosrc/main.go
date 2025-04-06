@@ -27,7 +27,7 @@ func transcriptsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tryPath := fmt.Sprintf("./transcripts/user-%s-%s.html", userid, unix_timestamp)
+	tryPath := fmt.Sprintf("transcripts/user-%s-%s.html", userid, unix_timestamp)
 	if _, err := os.Stat(tryPath); os.IsNotExist(err) {
 		http.NotFound(w, r)
 		return
