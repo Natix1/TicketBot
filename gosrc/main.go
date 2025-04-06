@@ -19,8 +19,8 @@ func transcriptsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userid := path_args[1]
-	unix_timestamp := path_args[2]
+	userid := path_args[2]
+	unix_timestamp := path_args[3]
 
 	if !validID.MatchString(userid) || !validID.MatchString(unix_timestamp) {
 		http.Error(w, "Invalid ID or timestamp format!", http.StatusBadRequest)
