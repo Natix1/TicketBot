@@ -21,7 +21,7 @@ CATEGORY_ID = ServerJSON.TicketsCategoryID
 TICKET_CHANNEL_IDS = []
 
 class RemovalPanel(discord.ui.View):
-    @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌")
+    @discord.ui.button(label = "Close", style = discord.ButtonStyle.primary, emoji = "❌", custom_id="ticket_close_button")
     async def button_callback(self, interaction: discord.Interaction, button: discord.Button):
         await interaction.response.defer(ephemeral=True)
 
@@ -43,7 +43,10 @@ class RemovalPanel(discord.ui.View):
             TICKET_CHANNEL_IDS.remove(interaction.channel.id)
         
 class TicketPanel(discord.ui.View):
-    @discord.ui.button(label = "Click here!", style = discord.ButtonStyle.primary, emoji="📥")
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(label = "Click here!", style = discord.ButtonStyle.primary, emoji="📥", custom_id="ticket_create_button")
     async def button_callback(self, interaction: discord.Interaction, button: discord.Button):
         await interaction.response.send_message("Creating ticket...", ephemeral=True)
 
@@ -92,7 +95,9 @@ async def handler(interaction: discord.Interaction):
 @client.event
 async def on_ready():
     await tree.sync(guild=discord.Object(id=GUILD_ID))
-    print("Ready! " + "Logged in as " + client.user.name)
+    client.add_view(TicketPanel())
+    client.add_view(RemovalPanel())
+    print(f"Ready! Logged in as {client.user.name}#{client.user.discriminator} with UserID {client.user.id}!")
 
 @client.event
 async def on_message(message: discord.Message):
